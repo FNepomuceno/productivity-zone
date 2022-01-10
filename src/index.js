@@ -16,7 +16,7 @@ class ProfileInfo extends React.Component {
 		if (user) {
 			return (
 				<div className="profile-info">
-					<p>Welcome, user.</p>
+					<p>Welcome, {this.props.user.name}.</p>
 					<p>
 						<span class="login-text" onClick={this.props.logout}>Logout</span>
 						&nbsp;to switch profiles
