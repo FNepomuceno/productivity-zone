@@ -3,11 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 // --- Components ---
+function TitleDisplay(props) {
+	return (
+		<h1 className="title-display">Productivity Zone</h1>
+	);
+}
+
 class Header extends React.Component {
 	render() {
 		return (
 			<div className="header">
-				<h1 className="title-display">Productivity Zone</h1>
+				<TitleDisplay />
 				<p className="profile-info">Welcome, guest.</p>
 			</div>
 		);
