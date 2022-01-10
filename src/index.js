@@ -52,6 +52,33 @@ class Header extends React.Component {
 	}
 }
 
+class ContentContainer extends React.Component {
+	render() {
+		let content = <p>Unknown Content</p>;
+
+		// TODO: determine which component to load depending on a predetermined list
+		if (this.props.type === "Tasks") {
+			content = <p>Tasks App under construction</p>;
+		} else if (this.props.type === "Timer") {
+			content = <p>Timer App under construction</p>;
+		}
+
+		return (
+			<div className="container">
+				<div className="col-filler" />
+				<div className="content">
+					<div className="tab-selector">
+						<div className="tab-option tab-selected"><h2>Tasks</h2></div>
+						<div className="tab-option"><h2>Timer</h2></div>
+					</div>
+					{content}
+				</div>
+				<div className="col-filler" />
+			</div>
+		);
+	}
+}
+
 class App extends React.Component {
 	constructor(props) {
 		super(props);
@@ -59,6 +86,7 @@ class App extends React.Component {
 		this.handleLogoutClick = this.handleLogoutClick.bind(this);
 		this.state = {
 			user: null,
+			tab: "Tasks",
 		};
 	}
 
@@ -70,13 +98,10 @@ class App extends React.Component {
 					login={this.handleLoginClick}
 					logout={this.handleLogoutClick}
 				/>
-				<div className="container">
-					<div className="col-filler" />
-					<div className="content">
-						Work in Progress
-					</div>
-					<div className="col-filler" />
-				</div>
+				<ContentContainer
+					user={this.state.user}
+					type={this.state.tab}
+				/>
 				<div className="footer">
 					Made by me
 				</div>
