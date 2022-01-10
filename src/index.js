@@ -18,7 +18,7 @@ class ProfileInfo extends React.Component {
 				<div className="profile-info">
 					<p>Welcome, {this.props.user.name}.</p>
 					<p>
-						<span class="login-text" onClick={this.props.logout}>Logout</span>
+						<span className="login-text" onClick={this.props.logout}>Logout</span>
 						&nbsp;to switch profiles
 					</p>
 				</div>
@@ -29,7 +29,7 @@ class ProfileInfo extends React.Component {
 			<div className="profile-info">
 				<p>Welcome, guest.</p>
 				<p>
-					<span class="login-text" onClick={this.props.login}>Login</span>
+					<span className="login-text" onClick={this.props.login}>Login</span>
 					&nbsp;to save stats
 				</p>
 			</div>
@@ -53,23 +53,51 @@ class Header extends React.Component {
 }
 
 class ContentContainer extends React.Component {
-	render() {
-		let content = <p>Unknown Content</p>;
+	constructor(props) {
+		super(props);
 
-		// TODO: determine which component to load depending on a predetermined list
-		if (this.props.type === "Tasks") {
-			content = <p>Tasks App under construction</p>;
-		} else if (this.props.type === "Timer") {
-			content = <p>Timer App under construction</p>;
+		this.default = <p>Choose an app above</p>;
+		let typePairs = [
+			["Tasks", <p>Tasks App under construction</p>],
+			["Timer", <p>Timer App under construction</p>],
+		];
+
+		this.types = typePairs.reduce((lst, entry) => {
+			lst.push(entry[0]);
+			return lst;
+		}, []);
+
+		this.apps = typePairs.reduce((lst, entry) => {
+			lst.push(entry[1]);
+			return lst;
+		}, []);
+	}
+
+	render() {
+		let type;
+		let content = this.default;
+
+		for (let i in this.types) {
+			if (this.types[i] === this.props.type) {
+				type = this.types[i];
+				content = this.apps[i];
+				break;
+			}
 		}
+
+		let options = this.types.map((optType) => {
+			let classes = "tab-option";
+			if (optType === type) { classes = classes + " tab-selected"; }
+
+			return <div className={classes} key={optType}><h2>{optType}</h2></div>;
+		});
 
 		return (
 			<div className="container">
 				<div className="col-filler" />
 				<div className="content">
 					<div className="tab-selector">
-						<div className="tab-option tab-selected"><h2>Tasks</h2></div>
-						<div className="tab-option"><h2>Timer</h2></div>
+						{options}
 					</div>
 					{content}
 				</div>
