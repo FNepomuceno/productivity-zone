@@ -9,12 +9,20 @@ function TitleDisplay(props) {
 	);
 }
 
+class ProfileInfo extends React.Component {
+	render() {
+		return (
+			<p className="profile-info">Welcome, guest.</p>
+		);
+	}
+}
+
 class Header extends React.Component {
 	render() {
 		return (
 			<div className="header">
 				<TitleDisplay />
-				<p className="profile-info">Welcome, guest.</p>
+				<ProfileInfo />
 			</div>
 		);
 	}
