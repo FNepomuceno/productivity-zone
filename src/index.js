@@ -1,17 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 
+// --- Components ---
+class App extends React.Component {
+	render() {
+		return (
+			<div className="app-container">
+				<div className="header">
+					<h1>Productivity Zone</h1>
+				</div>
+				<div className="container">
+					<div className="col-filler" />
+					<div className="content">
+						Work in Progress
+					</div>
+					<div className="col-filler" />
+				</div>
+				<div className="footer">
+					Made by me
+				</div>
+			</div>
+		);
+	}
+}
+
+// --- Functions ---
+
+// --- Render ---
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+	<App />,
+	document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
