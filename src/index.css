@@ -9,15 +9,6 @@ html, body, div#root, .app-container {
 	grid-template-rows: auto 1fr auto;
 }
 
-.header {
-	color: #EEEEFF;
-	background-color: #000077;
-}
-
-h1 {
-	margin: 0.25em auto 0.25em 0.5em;
-}
-
 .container {
 	display: grid;
 	grid-template-columns: 1fr 3fr 1fr;
@@ -42,4 +33,24 @@ h1 {
 
 .header, .content, .footer {
 	padding: 0.5em;
+}
+
+
+
+.header {
+	color: #EEEEFF;
+	background-color: #000077;
+	padding-left: 1em;
+	padding-right: 1em;
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+}
+
+.header .title-display {
+	margin: 0.25em 0;
+}
+
+.header .profile-info {
+	margin: 0.25em 0;
+	text-align: right;
 }

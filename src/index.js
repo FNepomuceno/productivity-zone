@@ -3,13 +3,22 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 // --- Components ---
+class Header extends React.Component {
+	render() {
+		return (
+			<div className="header">
+				<h1 className="title-display">Productivity Zone</h1>
+				<p className="profile-info">Welcome, guest.</p>
+			</div>
+		);
+	}
+}
+
 class App extends React.Component {
 	render() {
 		return (
 			<div className="app-container">
-				<div className="header">
-					<h1>Productivity Zone</h1>
-				</div>
+				<Header />
 				<div className="container">
 					<div className="col-filler" />
 					<div className="content">
