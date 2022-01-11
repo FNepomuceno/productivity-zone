@@ -56,12 +56,24 @@ class TasksApp extends React.Component {
 	constructor(props) {
 		super(props);
 
+		this.handleNewTask = this.handleNewTask.bind(this);
+
 		// TODO: Get tasks from cookie somehow instead of this
 		this.tasks = [
 			"Do laundry",
 			"Go grocery shopping",
 			"Pay bills",
 		];
+	}
+
+	handleNewTask() {
+		// TODO: create form in modal for creating new task
+		let textDesc = "Create a task";
+		let user = "[Guest]";
+		let dueDate = new Date();
+		let db = this.props.db;
+
+		addTask(db, dueDate, textDesc, user);
 	}
 
 	render() {
@@ -81,7 +93,7 @@ class TasksApp extends React.Component {
 				<ul>
 					{taskItems}
 				</ul>
-				<button>New task</button>
+				<button onClick={this.handleNewTask}>New task</button>
 				<button>Edit tasks</button>
 			</div>
 		);
@@ -91,37 +103,37 @@ class TasksApp extends React.Component {
 class ContentContainer extends React.Component {
 	constructor(props) {
 		super(props);
-
 		this.default = <p>Choose an app above</p>;
+	}
+
+	render() {
 		let typePairs = [
-			["Tasks", <TasksApp />],
+			["Tasks", <TasksApp db={this.props.db} />],
 			["Timer", <p>Timer App under construction</p>],
 		];
 
-		this.types = typePairs.reduce((lst, entry) => {
+		let types = typePairs.reduce((lst, entry) => {
 			lst.push(entry[0]);
 			return lst;
 		}, []);
 
-		this.apps = typePairs.reduce((lst, entry) => {
+		let apps = typePairs.reduce((lst, entry) => {
 			lst.push(entry[1]);
 			return lst;
 		}, []);
-	}
 
-	render() {
 		let type;
 		let content = this.default;
 
-		for (let i in this.types) {
-			if (this.types[i] === this.props.type) {
-				type = this.types[i];
-				content = this.apps[i];
+		for (let i in types) {
+			if (types[i] === this.props.type) {
+				type = types[i];
+				content = apps[i];
 				break;
 			}
 		}
 
-		let options = this.types.map((optType) => {
+		let options = types.map((optType) => {
 			let classes = "tab-option noselect";
 			if (optType === type) { classes = classes + " tab-selected"; }
 
@@ -169,7 +181,7 @@ class App extends React.Component {
 			console.error("Could not set up database");
 		}
 
-		const request = indexedDB.open('TaskList', 1);
+		const request = indexedDB.open("ProductivityZone", 1);
 		request.onerror = (event) => {
 			console.error(`Database error: ${event.target.errorCode}`);
 		};
@@ -189,7 +201,7 @@ class App extends React.Component {
 			}
 
 			// Create object store
-			let taskStore = db.createObjectStore("TaskList", { keypath: "timeCreated" });
+			let taskStore = db.createObjectStore("TaskList", { keyPath: "timeCreated" });
 			taskStore.createIndex("dueDate", "dueDate", { unique: false });
 			taskStore.createIndex("textDesc", "textDesc", { unique: false });
 			taskStore.createIndex("user", "user", { unique: false });
@@ -215,6 +227,7 @@ class App extends React.Component {
 				<ContentContainer
 					user={this.state.user}
 					type={this.state.tab}
+					db={this.state.db}
 					switch={this.handleTabSwitch}
 					ctx={this}
 				/>
@@ -249,6 +262,27 @@ class App extends React.Component {
 }
 
 // --- Functions ---
+function addTask(db, dueDate, textDesc, user) {
+	let newItem = {
+		timeCreated: new Date().toISOString(),
+		dueDate: dueDate,
+		textDesc: textDesc,
+		user: user,
+		completed: false,
+	};
+
+	const transaction = db.transaction("TaskList", "readwrite");
+	const store = transaction.objectStore("TaskList");
+
+	let query = store.put(newItem);
+	query.onsuccess = (event) => {
+		console.log(`Inserted new item: ${JSON.stringify(newItem)}`);
+	};
+
+	query.onerror = (event) => {
+		console.error(`Transaction error: ${event.target.errorCode}`);
+	};
+}
 
 // --- Render ---
 ReactDOM.render(
