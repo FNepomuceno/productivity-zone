@@ -87,6 +87,11 @@ class TasksApp extends React.Component {
 			);
 		});
 
+		// TODO: turn these into task items
+		if (this.props.db) {
+			getTasks(this.props.db, this.props.user);
+		}
+
 		return (
 			<div>
 				<p>Here are your tasks to do:</p>
@@ -211,6 +216,8 @@ class App extends React.Component {
 
 	componentWillUnmount() {
 		if (this.state.db) {
+			// TODO: clear guest tasks
+
 			console.log("Closing database");
 			this.state.db.close();
 		}
@@ -281,6 +288,19 @@ function addTask(db, dueDate, textDesc, user) {
 
 	query.onerror = (event) => {
 		console.error(`Transaction error: ${event.target.errorCode}`);
+	};
+}
+
+function getTasks(db, user) {
+	const userName = user? user.name: "[Guest]";
+	const transaction = db.transaction("TaskList", "readonly");
+	const store = transaction.objectStore("TaskList");
+
+	let userIndex = store.index("user");
+	let query = userIndex.getAll(userName);
+
+	query.onsuccess = () => {
+		console.log(query.result);
 	};
 }
 
