@@ -95,3 +95,8 @@ html, body, div#root, .app-container {
 .tab-option.tab-selected {
 	background-color: #DDCCEE;
 }
+
+
+.task-item {
+	list-style: none;
+}

@@ -53,9 +53,37 @@ class Header extends React.Component {
 }
 
 class TasksApp extends React.Component {
+	constructor(props) {
+		super(props);
+
+		// TODO: Get tasks from cookie somehow instead of this
+		this.tasks = [
+			"Do laundry",
+			"Go grocery shopping",
+			"Pay bills",
+		];
+	}
+
 	render() {
+		// TODO: make id be "creation time"
+		let taskItems = this.tasks.map((task, index) => {
+			return (
+				<li className="task-item" key={index}>
+					<input type="checkbox" /> &nbsp;
+					{task}
+				</li>
+			);
+		});
+
 		return (
-			<p>Tasks App under construction</p>
+			<div>
+				<p>Here are your tasks to do:</p>
+				<ul>
+					{taskItems}
+				</ul>
+				<button>New task</button>
+				<button>Edit mode</button>
+			</div>
 		);
 	}
 }
