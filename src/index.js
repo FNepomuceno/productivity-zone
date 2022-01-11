@@ -89,7 +89,15 @@ class ContentContainer extends React.Component {
 			let classes = "tab-option";
 			if (optType === type) { classes = classes + " tab-selected"; }
 
-			return <div className={classes} key={optType}><h2>{optType}</h2></div>;
+			let handleClick = () => {
+				return this.props.switch.call(this.props.ctx, optType);
+			};
+
+			return (
+				<div className={classes} key={optType} onClick={handleClick}>
+					<h2>{optType}</h2>
+				</div>
+			);
 		});
 
 		return (
@@ -112,6 +120,7 @@ class App extends React.Component {
 		super(props);
 		this.handleLoginClick = this.handleLoginClick.bind(this);
 		this.handleLogoutClick = this.handleLogoutClick.bind(this);
+		this.handleTabSwitch = this.handleTabSwitch.bind(this);
 		this.state = {
 			user: null,
 			tab: "Tasks",
@@ -129,6 +138,8 @@ class App extends React.Component {
 				<ContentContainer
 					user={this.state.user}
 					type={this.state.tab}
+					switch={this.handleTabSwitch}
+					ctx={this}
 				/>
 				<div className="footer">
 					Made by me
@@ -144,13 +155,18 @@ class App extends React.Component {
 				name: "Productivity Boss",
 			},
 		});
-		console.log("login?");
 	}
 
 	handleLogoutClick() {
 		// TODO: modal for logging out
 		this.setState({
 			user: null,
+		});
+	}
+
+	handleTabSwitch(newTab) {
+		this.setState({
+			tab: newTab,
 		});
 	}
 }
