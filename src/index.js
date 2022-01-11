@@ -5,7 +5,7 @@ import './index.css';
 // --- Components ---
 function TitleDisplay(props) {
 	return (
-		<h1 className="title-display">Productivity Zone</h1>
+		<h1 className="title-display noselect">Productivity Zone</h1>
 	);
 }
 
@@ -15,7 +15,7 @@ class ProfileInfo extends React.Component {
 
 		if (user) {
 			return (
-				<div className="profile-info">
+				<div className="profile-info noselect">
 					<p>Welcome, {this.props.user.name}.</p>
 					<p>
 						<span className="login-text" onClick={this.props.logout}>Logout</span>
@@ -26,7 +26,7 @@ class ProfileInfo extends React.Component {
 		}
 
 		return (
-			<div className="profile-info">
+			<div className="profile-info noselect">
 				<p>Welcome, guest.</p>
 				<p>
 					<span className="login-text" onClick={this.props.login}>Login</span>
@@ -94,7 +94,7 @@ class ContentContainer extends React.Component {
 		}
 
 		let options = this.types.map((optType) => {
-			let classes = "tab-option";
+			let classes = "tab-option noselect";
 			if (optType === type) { classes = classes + " tab-selected"; }
 
 			let handleClick = () => {
