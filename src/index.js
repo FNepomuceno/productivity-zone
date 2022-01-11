@@ -82,7 +82,7 @@ class TasksApp extends React.Component {
 					{taskItems}
 				</ul>
 				<button>New task</button>
-				<button>Edit mode</button>
+				<button>Edit tasks</button>
 			</div>
 		);
 	}
@@ -160,7 +160,48 @@ class App extends React.Component {
 		this.state = {
 			user: null,
 			tab: "Tasks",
+			db: null,
 		};
+	}
+
+	componentDidMount() {
+		if (!window.indexedDB) {
+			console.error("Could not set up database");
+		}
+
+		const request = indexedDB.open('TaskList', 1);
+		request.onerror = (event) => {
+			console.error(`Database error: ${event.target.errorCode}`);
+		};
+
+		request.onsuccess = (event) => {
+			console.log("Database initialized");
+			this.setState({
+				db: request.result,
+			});
+		};
+
+		// First time setup
+		request.onupgradeneeded = (event) => {
+			let db = event.target.result;
+			db.onerror = (event) => {
+				console.error("Error loading database");
+			}
+
+			// Create object store
+			let taskStore = db.createObjectStore("TaskList", { keypath: "timeCreated" });
+			taskStore.createIndex("dueDate", "dueDate", { unique: false });
+			taskStore.createIndex("textDesc", "textDesc", { unique: false });
+			taskStore.createIndex("user", "user", { unique: false });
+			taskStore.createIndex("completed", "completed", { unique: false });
+		};
+	}
+
+	componentWillUnmount() {
+		if (this.state.db) {
+			console.log("Closing database");
+			this.state.db.close();
+		}
 	}
 
 	render() {
