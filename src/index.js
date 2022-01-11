@@ -52,13 +52,21 @@ class Header extends React.Component {
 	}
 }
 
+class TasksApp extends React.Component {
+	render() {
+		return (
+			<p>Tasks App under construction</p>
+		);
+	}
+}
+
 class ContentContainer extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.default = <p>Choose an app above</p>;
 		let typePairs = [
-			["Tasks", <p>Tasks App under construction</p>],
+			["Tasks", <TasksApp />],
 			["Timer", <p>Timer App under construction</p>],
 		];
 
