@@ -142,9 +142,7 @@ class ContentContainer extends React.Component {
 			let classes = "tab-option noselect";
 			if (optType === type) { classes = classes + " tab-selected"; }
 
-			let handleClick = () => {
-				return this.props.switch.call(this.props.ctx, optType);
-			};
+			let handleClick = this.props.switchTab(optType);
 
 			return (
 				<div className={classes} key={optType} onClick={handleClick}>
@@ -174,6 +172,7 @@ class App extends React.Component {
 		this.handleLoginClick = this.handleLoginClick.bind(this);
 		this.handleLogoutClick = this.handleLogoutClick.bind(this);
 		this.handleTabSwitch = this.handleTabSwitch.bind(this);
+		this.makeTabUpdater = this.makeTabUpdater.bind(this);
 		this.componentCleanup = this.componentCleanup.bind(this);
 		this.state = {
 			user: null,
@@ -222,8 +221,7 @@ class App extends React.Component {
 					user={this.state.user}
 					type={this.state.tab}
 					db={this.state.db}
-					switch={this.handleTabSwitch}
-					ctx={this}
+					switchTab={this.makeTabUpdater}
 				/>
 				<div className="footer">
 					Made by me
@@ -246,6 +244,12 @@ class App extends React.Component {
 		this.setState({
 			user: null,
 		});
+	}
+
+	makeTabUpdater(newValue) {
+		return function() {
+			this.handleTabSwitch(newValue);
+		}.bind(this);
 	}
 
 	handleTabSwitch(newTab) {
