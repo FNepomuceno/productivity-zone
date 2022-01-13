@@ -58,6 +58,7 @@ class TasksApp extends React.Component {
 
 		this.handleNewTask = this.handleNewTask.bind(this);
 		this.updateTasks = this.updateTasks.bind(this);
+		this.toggleTaskFinished = this.toggleTaskFinished.bind(this);
 		this.state = { tasks: [] };
 	}
 
@@ -102,12 +103,24 @@ class TasksApp extends React.Component {
 		this.updateTasks();
 	}
 
+	toggleTaskFinished(event) {
+		// TODO: implement
+		let taskID = event.target.name;
+		let isFinished = event.target.checked;
+
+		updateTask(this.props.db, taskID, { completed: isFinished });
+	}
+
 	render() {
 		let taskItems = this.state.tasks.map((task, index) => {
 			return (
-				// TODO: make key be "creation time"
-				<li className="task-item" key={index}>
-					<input type="checkbox" /> &nbsp;
+				// TODO: make list item its own component
+				<li className="task-item" key={task.timeCreated}>
+					<input
+						type="checkbox"
+						name={task.timeCreated}
+						onChange={this.toggleTaskFinished}
+					/>&nbsp;
 					{task.textDesc}
 				</li>
 			);
@@ -330,7 +343,6 @@ function addTask(db, dueDate, textDesc, user) {
 	const store = transaction.objectStore("TaskList");
 
 	let query = store.put(newItem);
-	query.onsuccess = (event) => {};
 
 	query.onerror = (event) => {
 		console.error(`Transaction error: ${event.target.errorCode}`);
@@ -353,7 +365,7 @@ function getTasks(db, user, handleTasks, onlyUnfinished) {
 			const usernameMatches = cursor.value.user === userName;
 			const isVisible = !(onlyUnfinished && cursor.value.completed);
 
-			if (userNameMatches && isVisible) {
+			if (usernameMatches && isVisible) {
 				result.push(cursor.value);
 			}
 			cursor.continue();
@@ -376,6 +388,26 @@ function clearGuestTasks(db) {
 			cursor.continue();
 		}
 	}
+}
+
+function updateTask(db, taskID, data) {
+	const transaction = db.transaction("TaskList", "readwrite");
+	const store = transaction.objectStore("TaskList");
+	const retrieve = store.get(taskID);
+
+	retrieve.onsuccess = (event) => {
+		let item = event.target.result;
+
+		for (const [key, value] of Object.entries(data)) {
+			item[key] = value;
+		}
+
+		let update = store.put(item);
+
+		update.onerror = (event) => {
+			console.error(`Transaction error: ${event.target.errorCode}`);
+		};
+	};
 }
 
 function arraysAreSame(arr1, arr2) {
