@@ -2,23 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-import TitleDisplay from './TitleDisplay.js';
-import ProfileInfo from './ProfileInfo.js';
+import Header from './Header.js';
 
 // --- Components ---
-function Header(props) {
-	return (
-		<div className="header">
-			<TitleDisplay />
-			<ProfileInfo
-				user={this.props.user}
-				login={this.props.login}
-				logout={this.props.logout}
-			/>
-		</div>
-	);
-}
-
 class TasksApp extends React.Component {
 	constructor(props) {
 		super(props);
