@@ -26,7 +26,7 @@ class TasksApp extends React.Component {
 
 	componentDidUpdate(previousProps, previousState) {
 		const dbSet = this.props.db && !previousProps.db;
-		const tasksChanged = arraysAreSame(this.state.tasks, previousState.tasks);
+		const tasksChanged = !tasksAreSame(this.state.tasks, previousState.tasks);
 
 		if (dbSet || tasksChanged) {
 			this.updateTasks();
@@ -64,7 +64,7 @@ class TasksApp extends React.Component {
 		let isFinished = event.target.checked;
 
 		updateTask(this.props.db, taskID, { completed: isFinished });
-		this.setState({ tasks: this.state.tasks });
+		this.updateTasks();
 	}
 
 	render() {
@@ -106,10 +106,15 @@ class TasksApp extends React.Component {
 }
 
 // --- Functions ---
-function arraysAreSame(arr1, arr2) {
+function tasksAreSame(arr1, arr2) {
 	if (arr1.length !== arr2.length) { return false; }
-	return arr1.every((value, index) => {
-		return value === arr2[index];
+	return arr1.every((value1, index) => {
+		const value2 = arr2[index];
+		return (
+			value1.completed === value2.completed &&
+			value1.dueDate.getTime() === value2.dueDate.getTime() &&
+			value1.textDesc === value2.textDesc
+		);
 	});
 }
 
