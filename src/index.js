@@ -108,19 +108,28 @@ class TasksApp extends React.Component {
 				// TODO: make key be "creation time"
 				<li className="task-item" key={index}>
 					<input type="checkbox" /> &nbsp;
-					{task}
+					{task.textDesc}
 				</li>
 			);
 		});
+
+		let taskList = <p>Make a new task by clicking "New task" above</p>;
+		if (taskItems.length > 0) {
+			taskList = (
+				<div>
+					<p>Here are your tasks to do:</p>
+					<ul>
+						{taskItems}
+					</ul>
+				</div>
+			);
+		}
 
 		return (
 			<div>
 				<button onClick={this.handleNewTask}>New task</button> &nbsp;
 				<button>Edit tasks</button> <br />
-				<p>Here are your tasks to do:</p>
-				<ul>
-					{taskItems}
-				</ul>
+				{taskList}
 			</div>
 		);
 	}
@@ -328,22 +337,27 @@ function addTask(db, dueDate, textDesc, user) {
 	};
 }
 
-function getTasks(db, user, handleTasks) {
+function getTasks(db, user, handleTasks, onlyUnfinished) {
 	const userName = user? user.name: GUEST_NAME;
 	const transaction = db.transaction("TaskList", "readonly");
 	const store = transaction.objectStore("TaskList");
+	onlyUnfinished = !!onlyUnfinished;
 
 	let userIndex = store.index("user");
 	let result = [];
 
 	userIndex.openCursor().onsuccess = (event) => {
 		let cursor = event.target.result;
-		if (cursor && cursor.value.user === userName) {
-			result.push(cursor.value.textDesc);
-			cursor.continue();
-		}
 
-		if (!cursor) {
+		if (cursor && cursor.value.user === userName) {
+			const usernameMatches = cursor.value.user === userName;
+			const isVisible = !(onlyUnfinished && cursor.value.completed);
+
+			if (userNameMatches && isVisible) {
+				result.push(cursor.value);
+			}
+			cursor.continue();
+		} else {
 			handleTasks(result);
 		}
 	}
