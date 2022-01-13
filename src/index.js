@@ -2,13 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-// --- Components ---
-function TitleDisplay(props) {
-	return (
-		<h1 className="title-display noselect">Productivity Zone</h1>
-	);
-}
+import TitleDisplay from './TitleDisplay.js';
 
+// --- Components ---
 class ProfileInfo extends React.Component {
 	render() {
 		let user = this.props.user;
