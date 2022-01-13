@@ -3,114 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 import Header from './Header.js';
+import TasksApp from './TasksApp.js';
+
 import {
-	GUEST_NAME,
 	startDB,
-	addTask,
-	getTasks,
 	clearGuestTasks,
-	updateTask,
 } from './database.js';
 
 // --- Components ---
-class TasksApp extends React.Component {
-	constructor(props) {
-		super(props);
-
-		this.handleNewTask = this.handleNewTask.bind(this);
-		this.updateTasks = this.updateTasks.bind(this);
-		this.toggleTaskFinished = this.toggleTaskFinished.bind(this);
-		this.state = { tasks: [] };
-	}
-
-	componentDidMount() {
-		const db = this.props.db;
-		if (db) {
-			this.updateTasks();
-		}
-	}
-
-	componentDidUpdate(previousProps, previousState) {
-		const dbSet = this.props.db && !previousProps.db;
-		const tasksChanged = arraysAreSame(this.state.tasks, previousState.tasks);
-
-		if (dbSet || tasksChanged) {
-			this.updateTasks();
-		}
-	}
-
-	updateTasks() {
-		const handleTasks = (tasks) => {
-			if (!tasks) {
-				tasks = [];
-			}
-
-			this.setState({
-				tasks: tasks,
-			});
-		}
-
-		getTasks(this.props.db, this.props.user, handleTasks);
-	}
-
-	handleNewTask() {
-		// TODO: create form in modal for creating new task
-		let textDesc = "Create a task";
-		let user = GUEST_NAME;
-		let dueDate = new Date();
-		let db = this.props.db;
-
-		addTask(db, dueDate, textDesc, user);
-		this.updateTasks();
-	}
-
-	toggleTaskFinished(event) {
-		// TODO: implement
-		let taskID = event.target.name;
-		let isFinished = event.target.checked;
-
-		updateTask(this.props.db, taskID, { completed: isFinished });
-		this.setState({ tasks: this.state.tasks });
-	}
-
-	render() {
-		let taskItems = this.state.tasks.map((task, index) => {
-			return (
-				// TODO: make list item its own component
-				<li className="task-item" key={task.timeCreated}>
-					<input
-						type="checkbox"
-						name={task.timeCreated}
-						checked={task.completed}
-						onChange={this.toggleTaskFinished}
-					/>&nbsp;
-					{task.textDesc}
-				</li>
-			);
-		});
-
-		let taskList = <p>Make a new task by clicking "New task" above</p>;
-		if (taskItems.length > 0) {
-			taskList = (
-				<div>
-					<p>Here are your tasks to do:</p>
-					<ul>
-						{taskItems}
-					</ul>
-				</div>
-			);
-		}
-
-		return (
-			<div>
-				<button onClick={this.handleNewTask}>New task</button> &nbsp;
-				<button>Edit tasks</button> <br />
-				{taskList}
-			</div>
-		);
-	}
-}
-
 class ContentContainer extends React.Component {
 	constructor(props) {
 		super(props);
