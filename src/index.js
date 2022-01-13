@@ -109,6 +109,7 @@ class TasksApp extends React.Component {
 		let isFinished = event.target.checked;
 
 		updateTask(this.props.db, taskID, { completed: isFinished });
+		this.setState({ tasks: this.state.tasks });
 	}
 
 	render() {
@@ -119,6 +120,7 @@ class TasksApp extends React.Component {
 					<input
 						type="checkbox"
 						name={task.timeCreated}
+						checked={task.completed}
 						onChange={this.toggleTaskFinished}
 					/>&nbsp;
 					{task.textDesc}
