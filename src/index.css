@@ -79,6 +79,10 @@ html, body, div#root, .app-container {
 	justify-content: space-evenly;
 }
 
+.content > div {
+	margin: 0.5em;
+}
+
 .tab-option {
 	margin: 0;
 }

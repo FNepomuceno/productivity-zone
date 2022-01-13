@@ -57,29 +57,55 @@ class TasksApp extends React.Component {
 		super(props);
 
 		this.handleNewTask = this.handleNewTask.bind(this);
+		this.updateTasks = this.updateTasks.bind(this);
+		this.state = { tasks: [] };
+	}
 
-		// TODO: Get tasks from cookie somehow instead of this
-		this.tasks = [
-			"Do laundry",
-			"Go grocery shopping",
-			"Pay bills",
-		];
+	componentDidMount() {
+		const db = this.props.db;
+		if (db) {
+			this.updateTasks();
+		}
+	}
+
+	componentDidUpdate(previousProps, previousState) {
+		const dbSet = this.props.db && !previousProps.db;
+		const tasksChanged = arraysAreSame(this.state.tasks, previousState.tasks);
+
+		if (dbSet || tasksChanged) {
+			this.updateTasks();
+		}
+	}
+
+	updateTasks() {
+		const handleTasks = (tasks) => {
+			if (!tasks) {
+				tasks = [];
+			}
+
+			this.setState({
+				tasks: tasks,
+			});
+		}
+
+		getTasks(this.props.db, this.props.user, handleTasks);
 	}
 
 	handleNewTask() {
 		// TODO: create form in modal for creating new task
 		let textDesc = "Create a task";
-		let user = "[Guest]";
+		let user = GUEST_NAME;
 		let dueDate = new Date();
 		let db = this.props.db;
 
 		addTask(db, dueDate, textDesc, user);
+		this.updateTasks();
 	}
 
 	render() {
-		// TODO: make id be "creation time"
-		let taskItems = this.tasks.map((task, index) => {
+		let taskItems = this.state.tasks.map((task, index) => {
 			return (
+				// TODO: make key be "creation time"
 				<li className="task-item" key={index}>
 					<input type="checkbox" /> &nbsp;
 					{task}
@@ -87,19 +113,14 @@ class TasksApp extends React.Component {
 			);
 		});
 
-		// TODO: turn these into task items
-		if (this.props.db) {
-			getTasks(this.props.db, this.props.user);
-		}
-
 		return (
 			<div>
+				<button onClick={this.handleNewTask}>New task</button> &nbsp;
+				<button>Edit tasks</button> <br />
 				<p>Here are your tasks to do:</p>
 				<ul>
 					{taskItems}
 				</ul>
-				<button onClick={this.handleNewTask}>New task</button>
-				<button>Edit tasks</button>
 			</div>
 		);
 	}
@@ -307,15 +328,25 @@ function addTask(db, dueDate, textDesc, user) {
 	};
 }
 
-function getTasks(db, user) {
-	const userName = user? user.name: "[Guest]";
+function getTasks(db, user, handleTasks) {
+	const userName = user? user.name: GUEST_NAME;
 	const transaction = db.transaction("TaskList", "readonly");
 	const store = transaction.objectStore("TaskList");
 
 	let userIndex = store.index("user");
-	let query = userIndex.getAll(userName);
+	let result = [];
 
-	query.onsuccess = () => {};
+	userIndex.openCursor().onsuccess = (event) => {
+		let cursor = event.target.result;
+		if (cursor && cursor.value.user === userName) {
+			result.push(cursor.value.textDesc);
+			cursor.continue();
+		}
+
+		if (!cursor) {
+			handleTasks(result);
+		}
+	}
 }
 
 function clearGuestTasks(db) {
@@ -325,13 +356,19 @@ function clearGuestTasks(db) {
 	store.openCursor().onsuccess = (event) => {
 		let cursor = event.target.result;
 		if (cursor) {
-			console.log(cursor.value);
 			if (cursor.value.user === GUEST_NAME) {
 				store.delete(cursor.primaryKey);
 			}
 			cursor.continue();
 		}
 	}
+}
+
+function arraysAreSame(arr1, arr2) {
+	if (arr1.length !== arr2.length) { return false; }
+	return arr1.every((value, index) => {
+		return value === arr2[index];
+	});
 }
 
 // --- Render ---
