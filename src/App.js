@@ -10,6 +10,7 @@ import {
 
 import {
 	addUser,
+	removeUser,
 	getUser,
 } from './cookie.js';
 
@@ -41,12 +42,11 @@ class App extends React.Component {
 			if (userInfo && userInfo['name']) {
 				username = userInfo['name'];
 			}
+			let user = username? { name: username }: null;
 
 			this.setState({
 				db: event.target.result,
-				user: {
-					name: username,
-				},
+				user: user,
 			});
 		}
 
@@ -102,6 +102,8 @@ class App extends React.Component {
 
 	handleLogoutClick() {
 		// TODO: modal for logging out
+		removeUser();
+
 		this.setState({
 			user: null,
 		});

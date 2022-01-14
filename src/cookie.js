@@ -5,20 +5,29 @@ function addSeconds(date, numSeconds) {
 	return new Date(date.getTime() + (numSeconds * 1000));
 }
 
-function sessionTimeString() {
-	return addSeconds(new Date(), SESSION_TIME).toUTCString();
+function sessionTimeString(sessDuration) {
+	sessDuration = sessDuration? sessDuration: SESSION_TIME;
+	return addSeconds(new Date(), sessDuration).toUTCString();
 }
 
-function addUser(username) {
+function setUser(username, sessDuration) {
 	let contents = {
 		username: username,
-		expires: sessionTimeString(),
+		expires: sessionTimeString(sessDuration),
 		path: '/',
 	};
 
+	createCookie(contents);
+}
+
+function addUser(username) {
 	if (username) {
-		createCookie(contents);
+		setUser(username);
 	}
+}
+
+function removeUser() {
+	setUser('', -1);
 }
 
 function createCookie(data) {
@@ -66,5 +75,6 @@ function getUser() {
 
 export {
 	addUser,
+	removeUser,
 	getUser,
 };
