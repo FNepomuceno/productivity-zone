@@ -31,7 +31,7 @@ function addTask(db, dueDate, textDesc, user) {
 		timeCreated: new Date().toISOString(),
 		dueDate: dueDate,
 		textDesc: textDesc,
-		user: user,
+		user: (user)? user: GUEST_NAME,
 		completed: false,
 	};
 
@@ -107,7 +107,6 @@ function updateTask(db, taskID, data) {
 }
 
 export {
-	GUEST_NAME,
 	startDB,
 	addTask,
 	getTasks,
