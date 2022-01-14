@@ -2,15 +2,54 @@ import React from 'react';
 
 import TasksApp from './TasksApp.js';
 
+import {
+	startDB,
+	clearGuestTasks,
+} from './database.js';
+
 class ContentContainer extends React.Component {
 	constructor(props) {
 		super(props);
 		this.default = <p>Choose an app above</p>;
+		this.componentCleanup = this.componentCleanup.bind(this);
+		this.state = {
+			db: null,
+		};
+	}
+
+	componentDidMount() {
+		const updateDBstate = (event) => {
+			this.setState({
+				db: event.target.result,
+			});
+		}
+
+		startDB(updateDBstate);
+
+		window.addEventListener("beforeunload", this.componentCleanup);
+	}
+
+	componentDidUpdate() {
+		if (this.props.user) {
+			clearGuestTasks(this.state.db);
+		}
+	}
+
+	componentWillUnmount() {
+		this.componentCleanup();
+		window.removeEventListener("beforeunload", this.componentCleanup);
+	}
+
+	componentCleanup() {
+		if (this.state.db) {
+			clearGuestTasks(this.state.db);
+			this.state.db.close();
+		}
 	}
 
 	render() {
 		let typePairs = [
-			["Tasks", <TasksApp db={this.props.db} user={this.props.user} />],
+			["Tasks", <TasksApp db={this.state.db} user={this.props.user} />],
 			["Timer", <p>Timer App under construction</p>],
 		];
 

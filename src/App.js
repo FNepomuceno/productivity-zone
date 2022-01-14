@@ -4,11 +4,6 @@ import Header from './Header.js';
 import ContentContainer from './ContentContainer.js';
 
 import {
-	startDB,
-	clearGuestTasks,
-} from './database.js';
-
-import {
 	addUser,
 	removeUser,
 	getUser,
@@ -21,11 +16,9 @@ class App extends React.Component {
 		this.handleLogoutClick = this.handleLogoutClick.bind(this);
 		this.handleTabSwitch = this.handleTabSwitch.bind(this);
 		this.makeTabUpdater = this.makeTabUpdater.bind(this);
-		this.componentCleanup = this.componentCleanup.bind(this);
 		this.state = {
 			user: null,
 			tab: "Tasks",
-			db: null,
 		};
 	}
 
@@ -33,10 +26,6 @@ class App extends React.Component {
 		if (!window.indexedDB) {
 			console.error("Could not set up database");
 		}
-
-		// TODO: move DB stuff into ContentContainer
-		const updateDBstate = (event) => {
-			// TODO: move out of callback when DB stuff moves
 			const userInfo = getUser();
 			let username;
 			if (userInfo && userInfo['name']) {
@@ -45,26 +34,8 @@ class App extends React.Component {
 			let user = username? { name: username }: null;
 
 			this.setState({
-				db: event.target.result,
 				user: user,
 			});
-		}
-
-		startDB(updateDBstate);
-
-		window.addEventListener("beforeunload", this.componentCleanup);
-	}
-
-	componentWillUnmount() {
-		this.componentCleanup();
-		window.removeEventListener("beforeunload", this.componentCleanup);
-	}
-
-	componentCleanup() {
-		if (this.state.db) {
-			clearGuestTasks(this.state.db);
-			this.state.db.close();
-		}
 	}
 
 	render() {
@@ -78,7 +49,6 @@ class App extends React.Component {
 				<ContentContainer
 					user={this.state.user}
 					type={this.state.tab}
-					db={this.state.db}
 					switchTab={this.makeTabUpdater}
 				/>
 				<div className="footer">
@@ -92,7 +62,6 @@ class App extends React.Component {
 		// TODO: modal for selecting profile
 		const username = 'Productivity Boss';
 		addUser(username);
-		clearGuestTasks(this.state.db);
 
 		this.setState({
 			user: {
