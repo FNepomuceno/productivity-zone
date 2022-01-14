@@ -92,6 +92,7 @@ class App extends React.Component {
 		// TODO: modal for selecting profile
 		const username = 'Productivity Boss';
 		addUser(username);
+		clearGuestTasks(this.state.db);
 
 		this.setState({
 			user: {
