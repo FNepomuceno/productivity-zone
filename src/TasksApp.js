@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Modal from './Modal.js';
+import CreateForm from './CreateForm.js';
 
 import {
 	addTask,
@@ -12,7 +13,7 @@ class TasksApp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleNewTask = this.handleNewTask.bind(this);
-		this.handleSubmitNew = this.handleSubmitNew.bind(this);
+		this.handleCreateTask = this.handleCreateTask.bind(this);
 		this.updateTasks = this.updateTasks.bind(this);
 		this.toggleTaskFinished = this.toggleTaskFinished.bind(this);
 
@@ -59,10 +60,15 @@ class TasksApp extends React.Component {
 		});
 	}
 
-	handleSubmitNew(event) {
-		let textDesc = "Create a task";
-		let user = null;
-		let dueDate = new Date();
+	handleCreateTask(data) {
+		if (!data) {
+			this.updateTasks();
+			return;
+		}
+
+		let textDesc = data.description;
+		let user = (this.props.user)? this.props.user.name: null;
+		let dueDate = data.dueDate;
 		let db = this.props.db;
 
 		addTask(db, dueDate, textDesc, user);
@@ -106,11 +112,6 @@ class TasksApp extends React.Component {
 			);
 		}
 
-		// TODO: move to form component
-		function todayString() {
-			return new Date().toLocaleDateString('en-ca');
-		}
-
 		return (
 			<div>
 				<button onClick={this.handleNewTask}>New task</button> &nbsp;
@@ -118,14 +119,7 @@ class TasksApp extends React.Component {
 				{taskList}
 				<Modal show={this.state.mode === 'Creating'}>
 					<h3>New task</h3><hr />
-					<form action='#' onSubmit={this.handleSubmitNew} >
-						<label htmlFor='task-desc'>Description</label>
-						<input name='task-desc' type='text' /><br />
-						<label htmlFor='due-date'>Due Date</label>
-						<input name='due-date' type='date' min={todayString()} /><br />
-						<input name='submit' type='submit' value='Submit' />
-						<input name='cancel' type='button' value='Cancel' />
-					</form>
+					<CreateForm handleResult={this.handleCreateTask} />
 				</Modal>
 			</div>
 		);
