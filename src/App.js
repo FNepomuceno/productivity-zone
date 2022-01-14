@@ -8,6 +8,11 @@ import {
 	clearGuestTasks,
 } from './database.js';
 
+import {
+	addUser,
+	getUser,
+} from './cookie.js';
+
 class App extends React.Component {
 	constructor(props) {
 		super(props);
@@ -28,6 +33,14 @@ class App extends React.Component {
 			console.error("Could not set up database");
 		}
 
+		const userInfo = getUser();
+		if (userInfo && userInfo.name) {
+			this.setState({
+				user: userInfo.name,
+			});
+		}
+
+		// TODO: move DB stuff into ContentContainer
 		const updateDBstate = (event) => {
 			this.setState({
 				db: event.target.result,
