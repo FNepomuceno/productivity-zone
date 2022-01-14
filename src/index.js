@@ -19,7 +19,7 @@ class ContentContainer extends React.Component {
 
 	render() {
 		let typePairs = [
-			["Tasks", <TasksApp db={this.props.db} />],
+			["Tasks", <TasksApp db={this.props.db} user={this.props.user} />],
 			["Timer", <p>Timer App under construction</p>],
 		];
 
