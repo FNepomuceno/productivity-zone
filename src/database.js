@@ -46,7 +46,7 @@ function addTask(db, dueDate, textDesc, user) {
 }
 
 function getTasks(db, user, handleTasks, onlyUnfinished) {
-	const userName = user? user.name: GUEST_NAME;
+	const userName = (!!user)? user.name: GUEST_NAME;
 	const transaction = db.transaction("TaskList", "readonly");
 	const store = transaction.objectStore("TaskList");
 	onlyUnfinished = !!onlyUnfinished;
@@ -57,7 +57,7 @@ function getTasks(db, user, handleTasks, onlyUnfinished) {
 	userIndex.openCursor().onsuccess = (event) => {
 		let cursor = event.target.result;
 
-		if (cursor && cursor.value.user === userName) {
+		if (cursor) {
 			const usernameMatches = cursor.value.user === userName;
 			const isVisible = !(onlyUnfinished && cursor.value.completed);
 
