@@ -38,8 +38,6 @@ class TasksApp extends React.Component {
 			(!!this.props.user && this.props.user.name !== previousProps.user.name)
 		);
 
-		console.log(this.props.user);
-
 		if (dbSet || tasksChanged || userChanged) {
 			this.updateTasks();
 		}

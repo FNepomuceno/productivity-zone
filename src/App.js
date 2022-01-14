@@ -33,17 +33,20 @@ class App extends React.Component {
 			console.error("Could not set up database");
 		}
 
-		const userInfo = getUser();
-		if (userInfo && userInfo.name) {
-			this.setState({
-				user: userInfo.name,
-			});
-		}
-
 		// TODO: move DB stuff into ContentContainer
 		const updateDBstate = (event) => {
+			// TODO: move out of callback when DB stuff moves
+			const userInfo = getUser();
+			let username;
+			if (userInfo && userInfo['name']) {
+				username = userInfo['name'];
+			}
+
 			this.setState({
 				db: event.target.result,
+				user: {
+					name: username,
+				},
 			});
 		}
 
@@ -87,9 +90,12 @@ class App extends React.Component {
 
 	handleLoginClick() {
 		// TODO: modal for selecting profile
+		const username = 'Productivity Boss';
+		addUser(username);
+
 		this.setState({
 			user: {
-				name: "Productivity Boss",
+				name: username,
 			},
 		});
 	}
