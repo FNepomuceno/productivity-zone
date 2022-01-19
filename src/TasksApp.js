@@ -2,6 +2,7 @@ import React from 'react';
 
 import Modal from './Modal.js';
 import CreateForm from './CreateForm.js';
+import EditForm from './EditForm.js';
 
 import {
 	addTask,
@@ -13,7 +14,9 @@ class TasksApp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleNewTask = this.handleNewTask.bind(this);
+		this.handleEditTask = this.handleEditTask.bind(this);
 		this.handleCreateTask = this.handleCreateTask.bind(this);
+		this.handleUpdateTask = this.handleUpdateTask.bind(this);
 		this.updateTasks = this.updateTasks.bind(this);
 		this.toggleTaskFinished = this.toggleTaskFinished.bind(this);
 
@@ -79,6 +82,25 @@ class TasksApp extends React.Component {
 		this.updateTasks();
 	}
 
+	handleEditTask() {
+		this.setState({
+			mode: 'Editing',
+		});
+	}
+
+	handleUpdateTask(data) {
+		if (!data) {
+			this.updateTasks();
+			return;
+		}
+
+		const { taskID, ...dbData } = data;
+
+		updateTask(this.props.db, taskID, dbData);
+
+		this.updateTasks();
+	}
+
 	toggleTaskFinished(event) {
 		// TODO: implement
 		let taskID = event.target.name;
@@ -119,11 +141,15 @@ class TasksApp extends React.Component {
 		return (
 			<div>
 				<button onClick={this.handleNewTask}>New task</button> &nbsp;
-				<button>Edit tasks</button> <br />
+				<button onClick={this.handleEditTask}>Edit tasks</button> <br />
 				{taskList}
 				<Modal show={this.state.mode === 'Creating'}>
 					<h3>New task</h3><hr />
 					<CreateForm handleResult={this.handleCreateTask} />
+				</Modal>
+				<Modal show={this.state.mode === 'Editing'}>
+					<h3>Edit task</h3><hr />
+					<EditForm tasks={this.state.tasks} handleResult={this.handleUpdateTask} />
 				</Modal>
 			</div>
 		);
