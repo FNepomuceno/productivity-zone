@@ -56,33 +56,10 @@ html, body, div#root, .app-container {
 }
 
 
-.container {
-    display: grid;
-    grid-template-columns: 1fr 3fr 1fr;
-}
-
-.container > div {
-    display: flex;
-    flex-direction: column;
-}
-
-.col-filler {
-    background-color: #DDCCEE;
-}
-
-.content {
-    background-color: #EEEEEE;
-}
-
 .tab-selector {
     display: flex;
     justify-content: space-evenly;
 }
-
-.content > div {
-    margin: 0.5em;
-}
-
 
 .task-item {
     list-style: none;

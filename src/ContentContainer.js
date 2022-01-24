@@ -1,4 +1,5 @@
 import React from 'react';
+import './ContentContainer.css';
 
 class ContentContainer extends React.Component {
     constructor(props) {
