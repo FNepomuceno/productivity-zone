@@ -1,4 +1,5 @@
 import React from 'react';
+import './Modal.css';
 
 class Modal extends React.Component {
 	constructor(props) {
@@ -12,7 +13,9 @@ class Modal extends React.Component {
 
 		return (
 			<div className="modal">
-				{this.props.children}
+				<div className="modal-content">
+					{this.props.children}
+				</div>
 			</div>
 		);
 	}
