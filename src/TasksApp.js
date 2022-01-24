@@ -5,168 +5,168 @@ import CreateForm from './CreateForm.js';
 import EditForm from './EditForm.js';
 
 import {
-	addTask,
-	getTasks,
-	updateTask,
+    addTask,
+    getTasks,
+    updateTask,
 } from './database.js';
 
 class TasksApp extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handleNewTask = this.handleNewTask.bind(this);
-		this.handleEditTask = this.handleEditTask.bind(this);
-		this.handleCreateTask = this.handleCreateTask.bind(this);
-		this.handleUpdateTask = this.handleUpdateTask.bind(this);
-		this.updateTasks = this.updateTasks.bind(this);
-		this.toggleTaskFinished = this.toggleTaskFinished.bind(this);
+    constructor(props) {
+        super(props);
+        this.handleNewTask = this.handleNewTask.bind(this);
+        this.handleEditTask = this.handleEditTask.bind(this);
+        this.handleCreateTask = this.handleCreateTask.bind(this);
+        this.handleUpdateTask = this.handleUpdateTask.bind(this);
+        this.updateTasks = this.updateTasks.bind(this);
+        this.toggleTaskFinished = this.toggleTaskFinished.bind(this);
 
-		this.state = {
-			tasks: [],
-			mode: "Viewing",
-		};
-	}
+        this.state = {
+            tasks: [],
+            mode: "Viewing",
+        };
+    }
 
-	componentDidMount() {
-		const db = this.props.db;
-		if (db) {
-			this.updateTasks();
-		}
-	}
+    componentDidMount() {
+        const db = this.props.db;
+        if (db) {
+            this.updateTasks();
+        }
+    }
 
-	componentDidUpdate(previousProps, previousState) {
-		const dbSet = this.props.db && !previousProps.db;
-		const tasksChanged = !tasksAreSame(this.state.tasks, previousState.tasks);
-		const userChanged = (
-			!this.props.user !== !previousProps.user ||
-			(!!this.props.user && this.props.user.name !== previousProps.user.name)
-		);
+    componentDidUpdate(previousProps, previousState) {
+        const dbSet = this.props.db && !previousProps.db;
+        const tasksChanged = !tasksAreSame(this.state.tasks, previousState.tasks);
+        const userChanged = (
+            !this.props.user !== !previousProps.user ||
+            (!!this.props.user && this.props.user.name !== previousProps.user.name)
+        );
 
-		if (dbSet || tasksChanged || userChanged) {
-			this.updateTasks();
-		}
-	}
+        if (dbSet || tasksChanged || userChanged) {
+            this.updateTasks();
+        }
+    }
 
-	updateTasks() {
-		const handleTasks = (tasks) => {
-			if (!tasks) {
-				tasks = [];
-			}
+    updateTasks() {
+        const handleTasks = (tasks) => {
+            if (!tasks) {
+                tasks = [];
+            }
 
-			this.setState({
-				tasks: tasks,
-				mode: 'Viewing',
-			});
-		}
+            this.setState({
+                tasks: tasks,
+                mode: 'Viewing',
+            });
+        }
 
-		getTasks(this.props.db, this.props.user, handleTasks);
-	}
+        getTasks(this.props.db, this.props.user, handleTasks);
+    }
 
-	handleNewTask() {
-		this.setState({
-			mode: 'Creating',
-		});
-	}
+    handleNewTask() {
+        this.setState({
+            mode: 'Creating',
+        });
+    }
 
-	handleCreateTask(data) {
-		if (!data) {
-			this.updateTasks();
-			return;
-		}
+    handleCreateTask(data) {
+        if (!data) {
+            this.updateTasks();
+            return;
+        }
 
-		let textDesc = data.description;
-		let user = (this.props.user)? this.props.user.name: null;
-		let dueDate = data.dueDate;
-		let db = this.props.db;
+        let textDesc = data.description;
+        let user = (this.props.user)? this.props.user.name: null;
+        let dueDate = data.dueDate;
+        let db = this.props.db;
 
-		addTask(db, dueDate, textDesc, user);
-		this.updateTasks();
-	}
+        addTask(db, dueDate, textDesc, user);
+        this.updateTasks();
+    }
 
-	handleEditTask() {
-		this.setState({
-			mode: 'Editing',
-		});
-	}
+    handleEditTask() {
+        this.setState({
+            mode: 'Editing',
+        });
+    }
 
-	handleUpdateTask(data) {
-		if (!data) {
-			this.updateTasks();
-			return;
-		}
+    handleUpdateTask(data) {
+        if (!data) {
+            this.updateTasks();
+            return;
+        }
 
-		const { taskID, ...dbData } = data;
+        const { taskID, ...dbData } = data;
 
-		updateTask(this.props.db, taskID, dbData);
+        updateTask(this.props.db, taskID, dbData);
 
-		this.updateTasks();
-	}
+        this.updateTasks();
+    }
 
-	toggleTaskFinished(event) {
-		// TODO: implement
-		let taskID = event.target.name;
-		let isFinished = event.target.checked;
+    toggleTaskFinished(event) {
+        // TODO: implement
+        let taskID = event.target.name;
+        let isFinished = event.target.checked;
 
-		updateTask(this.props.db, taskID, { completed: isFinished });
-		this.updateTasks();
-	}
+        updateTask(this.props.db, taskID, { completed: isFinished });
+        this.updateTasks();
+    }
 
-	render() {
-		let taskItems = this.state.tasks.map((task, index) => {
-			return (
-				// TODO: make list item its own component
-				<li className="task-item" key={task.timeCreated}>
-					<input
-						type="checkbox"
-						name={task.timeCreated}
-						checked={task.completed}
-						onChange={this.toggleTaskFinished}
-					/>&nbsp;
-					{task.textDesc}
-				</li>
-			);
-		});
+    render() {
+        let taskItems = this.state.tasks.map((task, index) => {
+            return (
+                // TODO: make list item its own component
+                <li className="task-item" key={task.timeCreated}>
+                    <input
+                        type="checkbox"
+                        name={task.timeCreated}
+                        checked={task.completed}
+                        onChange={this.toggleTaskFinished}
+                    />&nbsp;
+                    {task.textDesc}
+                </li>
+            );
+        });
 
-		let taskList = <p>Make a new task by clicking "New task" above</p>;
-		if (taskItems.length > 0) {
-			taskList = (
-				<div>
-					<p>Here are your tasks to do:</p>
-					<ul>
-						{taskItems}
-					</ul>
-				</div>
-			);
-		}
+        let taskList = <p>Make a new task by clicking "New task" above</p>;
+        if (taskItems.length > 0) {
+            taskList = (
+                <div>
+                    <p>Here are your tasks to do:</p>
+                    <ul>
+                        {taskItems}
+                    </ul>
+                </div>
+            );
+        }
 
-		return (
-			<div>
-				<button onClick={this.handleNewTask}>New task</button> &nbsp;
-				<button onClick={this.handleEditTask}>Edit tasks</button> <br />
-				{taskList}
-				<Modal show={this.state.mode === 'Creating'}>
-					<h3>New task</h3><hr />
-					<CreateForm handleResult={this.handleCreateTask} />
-				</Modal>
-				<Modal show={this.state.mode === 'Editing'}>
-					<h3>Edit task</h3><hr />
-					<EditForm tasks={this.state.tasks} handleResult={this.handleUpdateTask} />
-				</Modal>
-			</div>
-		);
-	}
+        return (
+            <div>
+                <button onClick={this.handleNewTask}>New task</button> &nbsp;
+                <button onClick={this.handleEditTask}>Edit tasks</button> <br />
+                {taskList}
+                <Modal show={this.state.mode === 'Creating'}>
+                    <h3>New task</h3><hr />
+                    <CreateForm handleResult={this.handleCreateTask} />
+                </Modal>
+                <Modal show={this.state.mode === 'Editing'}>
+                    <h3>Edit task</h3><hr />
+                    <EditForm tasks={this.state.tasks} handleResult={this.handleUpdateTask} />
+                </Modal>
+            </div>
+        );
+    }
 }
 
 // --- Functions ---
 function tasksAreSame(arr1, arr2) {
-	if (arr1.length !== arr2.length) { return false; }
-	return arr1.every((value1, index) => {
-		const value2 = arr2[index];
-		return (
-			value1.completed === value2.completed &&
-			value1.dueDate.getTime() === value2.dueDate.getTime() &&
-			value1.textDesc === value2.textDesc
-		);
-	});
+    if (arr1.length !== arr2.length) { return false; }
+    return arr1.every((value1, index) => {
+        const value2 = arr2[index];
+        return (
+            value1.completed === value2.completed &&
+            value1.dueDate.getTime() === value2.dueDate.getTime() &&
+            value1.textDesc === value2.textDesc
+        );
+    });
 }
 
 export default TasksApp;

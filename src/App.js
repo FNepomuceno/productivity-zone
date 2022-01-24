@@ -4,92 +4,93 @@ import Header from './Header.js';
 import ContentContainer from './ContentContainer.js';
 
 import {
-	addUser,
-	removeUser,
-	getUser,
+    addUser,
+    removeUser,
+    getUser,
 } from './cookie.js';
 
 class App extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handleLoginClick = this.handleLoginClick.bind(this);
-		this.handleLogoutClick = this.handleLogoutClick.bind(this);
-		this.handleTabSwitch = this.handleTabSwitch.bind(this);
-		this.makeTabUpdater = this.makeTabUpdater.bind(this);
-		this.state = {
-			user: null,
-			tab: "Tasks",
-		};
-	}
+    constructor(props) {
+        super(props);
+        this.handleLoginClick = this.handleLoginClick.bind(this);
+        this.handleLogoutClick = this.handleLogoutClick.bind(this);
+        this.handleTabSwitch = this.handleTabSwitch.bind(this);
+        this.makeTabUpdater = this.makeTabUpdater.bind(this);
+        this.state = {
+            user: null,
+            tab: "Tasks",
+        };
+    }
 
-	componentDidMount() {
-		if (!window.indexedDB) {
-			console.error("Could not set up database");
-		}
-			const userInfo = getUser();
-			let username;
-			if (userInfo && userInfo['name']) {
-				username = userInfo['name'];
-			}
-			let user = username? { name: username }: null;
+    componentDidMount() {
+        if (!window.indexedDB) {
+            console.error("Could not set up database");
+        }
 
-			this.setState({
-				user: user,
-			});
-	}
+        const userInfo = getUser();
+        let username;
+        if (userInfo && userInfo['name']) {
+            username = userInfo['name'];
+        }
+        let user = username? { name: username }: null;
 
-	render() {
-		return (
-			<div className="app-container">
-				<Header
-					user={this.state.user}
-					login={this.handleLoginClick}
-					logout={this.handleLogoutClick}
-				/>
-				<ContentContainer
-					user={this.state.user}
-					type={this.state.tab}
-					switchTab={this.makeTabUpdater}
-				/>
-				<div className="footer">
-					Made by me
-				</div>
-			</div>
-		);
-	}
+        this.setState({
+            user: user,
+        });
+    }
 
-	handleLoginClick() {
-		// TODO: modal for selecting profile
-		const username = 'Productivity Boss';
-		addUser(username);
+    render() {
+        return (
+            <div className="app-container">
+                <Header
+                    user={this.state.user}
+                    login={this.handleLoginClick}
+                    logout={this.handleLogoutClick}
+                />
+                <ContentContainer
+                    user={this.state.user}
+                    type={this.state.tab}
+                    switchTab={this.makeTabUpdater}
+                />
+                <div className="footer">
+                    Made by me
+                </div>
+            </div>
+        );
+    }
 
-		this.setState({
-			user: {
-				name: username,
-			},
-		});
-	}
+    handleLoginClick() {
+        // TODO: modal for selecting profile
+        const username = 'Productivity Boss';
+        addUser(username);
 
-	handleLogoutClick() {
-		// TODO: modal for logging out
-		removeUser();
+        this.setState({
+            user: {
+                name: username,
+            },
+        });
+    }
 
-		this.setState({
-			user: null,
-		});
-	}
+    handleLogoutClick() {
+        // TODO: modal for logging out
+        removeUser();
 
-	makeTabUpdater(newValue) {
-		return function() {
-			this.handleTabSwitch(newValue);
-		}.bind(this);
-	}
+        this.setState({
+            user: null,
+        });
+    }
 
-	handleTabSwitch(newTab) {
-		this.setState({
-			tab: newTab,
-		});
-	}
+    makeTabUpdater(newValue) {
+        return function() {
+            this.handleTabSwitch(newValue);
+        }.bind(this);
+    }
+
+    handleTabSwitch(newTab) {
+        this.setState({
+            tab: newTab,
+        });
+    }
 }
 
 export default App;

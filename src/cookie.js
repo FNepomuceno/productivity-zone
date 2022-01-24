@@ -2,79 +2,79 @@
 const SESSION_TIME = 30; // 0.5 minutes
 
 function addSeconds(date, numSeconds) {
-	return new Date(date.getTime() + (numSeconds * 1000));
+    return new Date(date.getTime() + (numSeconds * 1000));
 }
 
 function sessionTimeString(sessDuration) {
-	sessDuration = sessDuration? sessDuration: SESSION_TIME;
-	return addSeconds(new Date(), sessDuration).toUTCString();
+    sessDuration = sessDuration? sessDuration: SESSION_TIME;
+    return addSeconds(new Date(), sessDuration).toUTCString();
 }
 
 function setUser(username, sessDuration) {
-	let contents = {
-		username: username,
-		expires: sessionTimeString(sessDuration),
-		path: '/',
-	};
+    let contents = {
+        username: username,
+        expires: sessionTimeString(sessDuration),
+        path: '/',
+    };
 
-	createCookie(contents);
+    createCookie(contents);
 }
 
 function addUser(username) {
-	if (username) {
-		setUser(username);
-	}
+    if (username) {
+        setUser(username);
+    }
 }
 
 function removeUser() {
-	setUser('', -1);
+    setUser('', -1);
 }
 
 function createCookie(data) {
-	const cookieText = Object.entries(data)
-		.map((entry) => {
-			const [key, value] = entry;
-			return `${key}=${value}`;
-		})
-		.reduce((prevVal, curVal) => {
-			return `${prevVal}; ${curVal}`;
-		});
+    const cookieText = Object.entries(data)
+        .map((entry) => {
+            const [key, value] = entry;
+            return `${key}=${value}`;
+        })
+        .reduce((prevVal, curVal) => {
+            return `${prevVal}; ${curVal}`;
+        });
 
-	document.cookie = cookieText;
+    document.cookie = cookieText;
 }
 
 function parseCookie(strData) {
-	const result = strData.split('; ')
-		.map((entry) => {
-			return entry.split('=');
-		})
-		.reduce((resObj, nxtEntry) => {
-			const [key, value] = nxtEntry;
-			resObj[key] = value;
-			return resObj;
-		}, {});
+    const result = strData.split('; ')
+        .map((entry) => {
+            return entry.split('=');
+        })
+        .reduce((resObj, nxtEntry) => {
+            const [key, value] = nxtEntry;
+            resObj[key] = value;
+            return resObj;
+        }, {});
 
-	return result;
+    return result;
 }
 
 function getUser() {
-	const cookie = document.cookie;
+    const cookie = document.cookie;
 
-	if (cookie) {
-		const cookieData = parseCookie(cookie);
+    if (cookie) {
+        const cookieData = parseCookie(cookie);
 
-		if (cookieData['username']) {
-			return {
-				name: cookieData['username'],
-			};
-		}
-	}
+        if (cookieData['username']) {
+            return {
+                name: cookieData['username'],
+            };
+        }
+    }
 
-	return null;
+    return null;
 }
 
 export {
-	addUser,
-	removeUser,
-	getUser,
+    addUser,
+    removeUser,
+    getUser,
 };

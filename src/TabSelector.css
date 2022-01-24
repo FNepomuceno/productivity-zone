@@ -1,23 +1,23 @@
 .tab-option {
-	margin: 0;
+    margin: 0;
 }
 
 .tab-option >h2 {
-	margin: 0;
-	padding: 0.25em 0.75em;
+    margin: 0;
+    padding: 0.25em 0.75em;
 }
 
 .tab-option :hover {
-	color: #3300CC;
+    color: #3300CC;
 }
 
 .tab-option.tab-selected {
-	background-color: #DDCCEE;
+    background-color: #DDCCEE;
 }
 
 .noselect {
-	user-select: none;
-	-ms-user-select: none;
-	-webkit-user-select: none;
-	cursor: default;
+    user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
 }
