@@ -83,23 +83,6 @@ html, body, div#root, .app-container {
 	margin: 0.5em;
 }
 
-.tab-option {
-	margin: 0;
-}
-
-.tab-option >h2 {
-	margin: 0;
-	padding: 0.25em 0.75em;
-}
-
-.tab-option :hover {
-	color: #3300CC;
-}
-
-.tab-option.tab-selected {
-	background-color: #DDCCEE;
-}
-
 
 .task-item {
 	list-style: none;

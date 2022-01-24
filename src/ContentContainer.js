@@ -1,6 +1,7 @@
 import React from 'react';
 
 import TasksApp from './TasksApp.js';
+import TabSelector from './TabSelector.js';
 
 import {
 	startDB,
@@ -63,37 +64,20 @@ class ContentContainer extends React.Component {
 			return lst;
 		}, []);
 
-		let type;
 		let content = this.default;
-
 		for (let i in types) {
 			if (types[i] === this.props.type) {
-				type = types[i];
 				content = apps[i];
 				break;
 			}
 		}
 
-		let options = types.map((optType) => {
-			let classes = "tab-option noselect";
-			if (optType === type) { classes = classes + " tab-selected"; }
-
-			let handleClick = this.props.switchTab(optType);
-
-			return (
-				<div className={classes} key={optType} onClick={handleClick}>
-					<h2>{optType}</h2>
-				</div>
-			);
-		});
-
 		return (
 			<div className="container">
 				<div className="col-filler" />
 				<div className="content">
-					<div className="tab-selector">
-						{options}
-					</div>
+					<TabSelector switchTab={this.props.switchTab}
+						type={this.props.type} types={types} />
 					{content}
 				</div>
 				<div className="col-filler" />
