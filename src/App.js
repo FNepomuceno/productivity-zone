@@ -2,12 +2,19 @@ import React from 'react';
 
 import Header from './Header.js';
 import ContentContainer from './ContentContainer.js';
+import TabSelector from './TabSelector.js';
+import TasksApp from './TasksApp.js';
 
 import {
     addUser,
     removeUser,
     getUser,
 } from './cookie.js';
+
+import {
+    startDB,
+    clearGuestTasks,
+} from './database.js';
 
 class App extends React.Component {
     constructor(props) {
@@ -16,9 +23,11 @@ class App extends React.Component {
         this.handleLogoutClick = this.handleLogoutClick.bind(this);
         this.handleTabSwitch = this.handleTabSwitch.bind(this);
         this.makeTabUpdater = this.makeTabUpdater.bind(this);
+        this.componentCleanup = this.componentCleanup.bind(this);
         this.state = {
             user: null,
             tab: "Tasks",
+            db: null,
         };
     }
 
@@ -27,6 +36,7 @@ class App extends React.Component {
             console.error("Could not set up database");
         }
 
+        // Set up cookie
         const userInfo = getUser();
         let username;
         if (userInfo && userInfo['name']) {
@@ -37,26 +47,35 @@ class App extends React.Component {
         this.setState({
             user: user,
         });
+
+        // Set up database
+        const updateDBstate = (event) => {
+            this.setState({
+                db: event.target.result,
+            });
+        }
+
+        startDB(updateDBstate);
+
+        window.addEventListener("beforeunload", this.componentCleanup);
     }
 
-    render() {
-        return (
-            <div className="app-container">
-                <Header
-                    user={this.state.user}
-                    login={this.handleLoginClick}
-                    logout={this.handleLogoutClick}
-                />
-                <ContentContainer
-                    user={this.state.user}
-                    type={this.state.tab}
-                    switchTab={this.makeTabUpdater}
-                />
-                <div className="footer">
-                    Made by me
-                </div>
-            </div>
-        );
+    componentDidUpdate() {
+        if (this.state.user) {
+            clearGuestTasks(this.state.db);
+        }
+    }
+
+    componentWillUnmount() {
+        this.componentCleanup();
+        window.removeEventListener("beforeunload", this.componentCleanup);
+    }
+
+    componentCleanup() {
+        if (this.state.db) {
+            clearGuestTasks(this.state.db);
+            this.state.db.close();
+        }
     }
 
     handleLoginClick() {
@@ -90,6 +109,34 @@ class App extends React.Component {
         this.setState({
             tab: newTab,
         });
+    }
+
+    render() {
+        let types = ['Tasks', 'Timer'];
+        let typeMap = {
+            'Tasks': <TasksApp db={this.state.db} user={this.state.user} />,
+            'Timer': <p>Timer App coming soon!</p>,
+        };
+
+        let content = typeMap[this.state.tab] || <p>Choose an app above</p>;
+
+        return (
+            <div className="app-container">
+                <Header
+                    user={this.state.user}
+                    login={this.handleLoginClick}
+                    logout={this.handleLogoutClick}
+                />
+                <ContentContainer>
+                    <TabSelector switchTab={this.makeTabUpdater}
+                        type={this.state.tab} types={types} />
+                    {content}
+                </ContentContainer>
+                <div className="footer">
+                    Made by me
+                </div>
+            </div>
+        );
     }
 }
 
