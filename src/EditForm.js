@@ -1,5 +1,7 @@
 import React from 'react';
 
+import TextInput from './TextInput.js';
+
 class EditForm extends React.Component {
     constructor(props) {
         super(props);
@@ -44,9 +46,9 @@ class EditForm extends React.Component {
         this.setState({ changedTask: newTask });
     }
 
-    handleChangeDesc(event) {
+    handleChangeDesc(value) {
         let newTask = this.state.changedTask;
-        newTask.description = event.target.value;
+        newTask.description = value;
         this.setState({ changedTask: newTask });
     }
 
@@ -85,13 +87,12 @@ class EditForm extends React.Component {
         // TODO: extract taskDetail as component
         let taskDetail = (!this.state.changedTask)? <p>No tasks to edit!</p>: (
             <div>
-                <label htmlFor='task-desc'>Description</label>
-                <input
+                <TextInput
+                    label='Description'
                     name='task-desc'
-                    type='text'
                     value={this.state.changedTask.description}
                     onChange={this.handleChangeDesc}
-                /><br />
+                />
                 <label htmlFor='due-date'>Due Date</label>
                 <input
                     name='due-date'
