@@ -16,7 +16,7 @@ class EditForm extends React.Component {
         );
 
         this.state = {
-            changedTask: (!this.props.tasks)? null: taskObj(this.props.tasks[0]),
+            changedTask: (!this.props.tasks.length)? null: taskObj(this.props.tasks[0]),
         };
 
         // The tasks should not change while this form is active,
