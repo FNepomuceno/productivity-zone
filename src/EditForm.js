@@ -1,6 +1,7 @@
 import React from 'react';
 
 import TextInput from './TextInput.js';
+import DateInput from './DateInput.js';
 
 class EditForm extends React.Component {
     constructor(props) {
@@ -52,9 +53,9 @@ class EditForm extends React.Component {
         this.setState({ changedTask: newTask });
     }
 
-    handleChangeDate(event) {
+    handleChangeDate(value) {
         let newTask = this.state.changedTask;
-        newTask.dueDate = event.target.value;
+        newTask.dueDate = value;
         this.setState({ changedTask: newTask });
     }
 
@@ -69,7 +70,7 @@ class EditForm extends React.Component {
 
         const result = {
             textDesc: this.state.changedTask.description,
-            dueDate: dateObj(this.state.changedTask.dueDate),
+            dueDate: this.state.changedTask.dueDate,
             completed: this.state.changedTask.finished,
             taskID: this.state.changedTask.taskID,
         };
@@ -93,14 +94,12 @@ class EditForm extends React.Component {
                     value={this.state.changedTask.description}
                     onChange={this.handleChangeDesc}
                 />
-                <label htmlFor='due-date'>Due Date</label>
-                <input
+                <DateInput
+                    label='Due Date'
                     name='due-date'
-                    type='date'
                     value={this.state.changedTask.dueDate}
-                    min={todayString()}
                     onChange={this.handleChangeDate}
-                /><br />
+                />
                 <label htmlFor='task-finished'>Task Finished</label>
                 <input
                     name='finished'
@@ -126,28 +125,13 @@ class EditForm extends React.Component {
 }
 
 // --- Functions ---
-function dateString(date) {
-    return date.toLocaleDateString('en-ca');
-}
-
-function todayString() {
-    return new Date().toLocaleDateString('en-ca');
-}
-
 function taskObj(task) {
     return {
         description: task.textDesc,
-        dueDate: dateString(task.dueDate),
+        dueDate: task.dueDate,
         finished: task.completed,
         taskID: task.timeCreated,
     }
-}
-
-function dateObj(dateStr) {
-    const utcDate = new Date(dateStr);
-    const result = new Date(utcDate.getTime() + (60000 * utcDate.getTimezoneOffset()));
-
-    return result;
 }
 
 export default EditForm;
