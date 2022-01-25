@@ -2,6 +2,7 @@ import React from 'react';
 
 import TextInput from './TextInput.js';
 import DateInput from './DateInput.js';
+import CheckboxInput from './CheckboxInput.js';
 
 class EditForm extends React.Component {
     constructor(props) {
@@ -59,9 +60,9 @@ class EditForm extends React.Component {
         this.setState({ changedTask: newTask });
     }
 
-    handleChangeFinished(event) {
+    handleChangeFinished(value) {
         let newTask = this.state.changedTask;
-        newTask.finished = event.target.checked;
+        newTask.finished = value;
         this.setState({ changedTask: newTask });
     }
 
@@ -100,13 +101,12 @@ class EditForm extends React.Component {
                     value={this.state.changedTask.dueDate}
                     onChange={this.handleChangeDate}
                 />
-                <label htmlFor='task-finished'>Task Finished</label>
-                <input
+                <CheckboxInput
+                    label='Task Finished'
                     name='finished'
-                    type='checkbox'
-                    checked={this.state.changedTask.finished}
+                    value={this.state.changedTask.finished}
                     onChange={this.handleChangeFinished}
-                /><br />
+                />
             </div>
         );
 
