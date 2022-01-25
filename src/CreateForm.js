@@ -1,5 +1,8 @@
 import React from 'react';
 
+import TextInput from './TextInput.js';
+import DateInput from './DateInput.js';
+
 class CreateForm extends React.Component {
     constructor(props) {
         super(props);
@@ -19,12 +22,12 @@ class CreateForm extends React.Component {
         };
     }
 
-    handleChangeDesc(event) {
-        this.setState({ description: event.target.value });
+    handleChangeDesc(value) {
+        this.setState({ description: value });
     }
 
-    handleChangeDate(event) {
-        this.setState({ dueDate: new Date(event.target.value) });
+    handleChangeDate(value) {
+        this.setState({ dueDate: value });
     }
 
     handleSubmit(event) {
@@ -47,21 +50,23 @@ class CreateForm extends React.Component {
     render() {
         return (
             <form action='#' onSubmit={this.handleSubmit} >
-                <label htmlFor='task-desc'>Description</label>
-                <input name='task-desc' type='text' onChange={this.handleChangeDesc} /><br />
-                <label htmlFor='due-date'>Due Date</label>
-                <input name='due-date' type='date' min={todayString()}
-                    onChange={this.handleChangeDate} /><br />
+                <TextInput
+                    label='Description'
+                    name='task-desc'
+                    value={this.state.description}
+                    onChange={this.handleChangeDesc}
+                />
+                <DateInput
+                    label='Due Date'
+                    name='due-date'
+                    value={this.state.dueDate}
+                    onChange={this.handleChangeDate}
+                />
                 <input name='submit' type='submit' value='Submit' />
                 <input name='cancel' type='button' value='Cancel' onClick={this.handleCancel} />
             </form>
         );
     }
-}
-
-// --- Functions ---
-function todayString() {
-    return new Date().toLocaleDateString('en-ca');
 }
 
 export default CreateForm;
