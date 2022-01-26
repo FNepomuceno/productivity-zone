@@ -11,10 +11,6 @@ html, body, div#root, .app-container {
 }
 
 
-.header .title-display {
-    margin: auto 0;
-}
-
 .header .profile-info {
     margin: 0.25em 0;
     text-align: right;
