@@ -11,14 +11,6 @@ html, body, div#root, .app-container {
 }
 
 
-.header {
-    color: #EEEEFF;
-    background-color: #000077;
-    padding: 0.5em 1em;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-}
-
 .header .title-display {
     margin: auto 0;
 }
@@ -26,10 +18,6 @@ html, body, div#root, .app-container {
 .header .profile-info {
     margin: 0.25em 0;
     text-align: right;
-}
-
-.header p {
-    margin: 0.3em 0;
 }
 
 .login-text {

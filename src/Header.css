@@ -1,0 +1,11 @@
+.header {
+    color: #EEEEFF;
+    background-color: #000077;
+    padding: 0.5em 1em;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+.header p {
+    margin: 0.3em 0;
+}
