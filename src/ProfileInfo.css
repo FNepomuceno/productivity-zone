@@ -1,0 +1,12 @@
+.profile-info {
+    margin: 0.25em 0;
+    text-align: right;
+}
+
+.login-text {
+    color: #FFCCFF;
+}
+
+.login-text:hover {
+    color: #FF77FF;
+}

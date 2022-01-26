@@ -1,3 +1,5 @@
+import './ProfileInfo.css';
+
 function ProfileInfo(props) {
     let user = props.user;
 
