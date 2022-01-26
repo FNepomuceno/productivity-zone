@@ -1,3 +1,8 @@
+.tab-selector {
+    display: flex;
+    justify-content: space-evenly;
+}
+
 .tab-option {
     margin: 0;
 }
@@ -13,11 +18,4 @@
 
 .tab-option.tab-selected {
     background-color: #DDCCEE;
-}
-
-.noselect {
-    user-select: none;
-    -ms-user-select: none;
-    -webkit-user-select: none;
-    cursor: default;
 }
