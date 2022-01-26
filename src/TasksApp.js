@@ -3,6 +3,7 @@ import React from 'react';
 import Modal from './Modal.js';
 import CreateForm from './CreateForm.js';
 import EditForm from './EditForm.js';
+import TaskItem from './TaskItem.js';
 
 import {
     addTask,
@@ -99,38 +100,22 @@ class TasksApp extends React.Component {
         this.updateTasks();
     }
 
-    toggleTaskFinished(event) {
-        // TODO: implement
-        let taskID = event.target.name;
-        let isFinished = event.target.checked;
-
-        updateTask(this.props.db, taskID, { completed: isFinished });
+    toggleTaskFinished(value) {
+        updateTask(this.props.db, value.taskID, { completed: value.completed });
         this.updateTasks();
     }
 
     render() {
-        let taskItems = this.state.tasks.map((task, index) => {
-            return (
-                // TODO: make list item its own component
-                <li className="task-item" key={task.timeCreated}>
-                    <input
-                        type="checkbox"
-                        name={task.timeCreated}
-                        checked={task.completed}
-                        onChange={this.toggleTaskFinished}
-                    />&nbsp;
-                    {task.textDesc}
-                </li>
-            );
-        });
-
         let taskList = <p>Make a new task by clicking "New task" above</p>;
-        if (taskItems.length > 0) {
+        if (this.state.tasks.length > 0) {
             taskList = (
                 <div>
                     <p>Here are your tasks to do:</p>
                     <ul>
-                        {taskItems}
+                        {this.state.tasks.map(task => (
+                            <TaskItem task={task} key={task.timeCreated}
+                                onChange={this.toggleTaskFinished} />
+                        ))}
                     </ul>
                 </div>
             );

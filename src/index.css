@@ -9,8 +9,3 @@ html, body, div#root, .app-container {
     -webkit-user-select: none;
     cursor: default;
 }
-
-
-.task-item {
-    list-style: none;
-}

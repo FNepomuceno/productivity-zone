@@ -66,8 +66,6 @@ class EditForm extends React.Component {
     }
 
     render() {
-        // TODO: extract taskDetail as component
-
         return (
             <form action='#' onSubmit={this.handleSubmit} >
                 <label htmlFor='task-select'>Select Task</label>
