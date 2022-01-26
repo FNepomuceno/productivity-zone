@@ -3,20 +3,6 @@ html, body, div#root, .app-container {
     margin: 0;
 }
 
-.app-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto;
-}
-
-.footer {
-    background-color: #9999FF;
-}
-
-.header, .content, .footer {
-    padding: 0.5em;
-}
-
 .noselect {
     user-select: none;
     -ms-user-select: none;
@@ -28,8 +14,7 @@ html, body, div#root, .app-container {
 .header {
     color: #EEEEFF;
     background-color: #000077;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding: 0.5em 1em;
     display: grid;
     grid-template-columns: 2fr 1fr;
 }

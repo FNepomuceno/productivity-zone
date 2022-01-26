@@ -16,6 +16,8 @@ import {
     clearGuestTasks,
 } from './database.js';
 
+import './App.css';
+
 class App extends React.Component {
     constructor(props) {
         super(props);
