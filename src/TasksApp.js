@@ -94,9 +94,7 @@ class TasksApp extends React.Component {
             return;
         }
 
-        const { taskID, ...dbData } = data;
-
-        updateTask(this.props.db, taskID, dbData);
+        updateTask(this.props.db, data.taskID, data.values);
 
         this.updateTasks();
     }
