@@ -1,24 +1,17 @@
-import React from 'react';
 import './Modal.css';
 
-class Modal extends React.Component {
-    constructor(props) {
-        super(props);
+function Modal(props) {
+    if (!props.show) {
+        return null;
     }
 
-    render() {
-        if (!this.props.show) {
-            return null;
-        }
-
-        return (
-            <div className="modal">
-                <div className="modal-content">
-                    {this.props.children}
-                </div>
+    return (
+        <div className="modal">
+            <div className="modal-content">
+                {props.children}
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 export default Modal;

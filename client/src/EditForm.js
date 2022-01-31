@@ -46,7 +46,7 @@ class EditForm extends React.Component {
     handleSwitch(event) {
         const taskID = event.target.value;
 
-        this.setState(this.stateObj(this.props.tasks.find(o => o.timeCreated == taskID)));
+        this.setState(this.stateObj(this.props.tasks.find(o => o.timeCreated === taskID)));
     }
 
     handleChange(value) {
