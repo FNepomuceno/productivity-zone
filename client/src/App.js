@@ -26,6 +26,7 @@ class App extends React.Component {
         this.handleTabSwitch = this.handleTabSwitch.bind(this);
         this.makeTabUpdater = this.makeTabUpdater.bind(this);
         this.componentCleanup = this.componentCleanup.bind(this);
+
         this.state = {
             user: null,
             tab: "Tasks",
@@ -80,25 +81,13 @@ class App extends React.Component {
         }
     }
 
-    handleLoginClick() {
-        // TODO: modal for selecting profile
-        const username = 'Productivity Boss';
-        addUser(username);
-
-        this.setState({
-            user: {
-                name: username,
-            },
-        });
+    handleLoginClick(response) {
+        // TODO: authenticate with backend
+        console.log(response);
     }
 
     handleLogoutClick() {
-        // TODO: modal for logging out
-        removeUser();
-
-        this.setState({
-            user: null,
-        });
+        // TODO: logout from backend
     }
 
     makeTabUpdater(newValue) {

@@ -10,3 +10,7 @@
 .login-text:hover {
     color: #FF77FF;
 }
+
+.profile-info > div {
+    float: right;
+}
