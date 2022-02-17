@@ -10,8 +10,9 @@ function ProfileInfo(props) {
             <div className="profile-info noselect">
                 <p>Welcome, {props.user.name}.</p>
                 <p>
-                    <span className="login-text" onClick={props.logout}>Logout</span>
-                    &nbsp;to switch profiles
+                    <span className="login-text" onClick={props.logout}>
+                        Click here to logout
+                    </span>
                 </p>
             </div>
         );
