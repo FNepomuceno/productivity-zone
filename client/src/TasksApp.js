@@ -48,6 +48,8 @@ class TasksApp extends React.Component {
     }
 
     updateTasks() {
+        if (!this.props.db) { return; }
+
         const handleTasks = (tasks) => {
             if (!tasks) {
                 tasks = [];

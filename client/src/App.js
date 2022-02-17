@@ -64,7 +64,7 @@ class App extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.state.user) {
+        if (this.state.user && this.state.db) {
             clearGuestTasks(this.state.db);
         }
     }
