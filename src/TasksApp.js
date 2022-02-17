@@ -1,9 +1,9 @@
 import React from 'react';
 
 import Modal from './Modal.js';
-import CreateForm from './CreateForm.js';
-import EditForm from './EditForm.js';
 import TaskItem from './TaskItem.js';
+import CreateForm from './form/CreateForm.js';
+import EditForm from './form/EditForm.js';
 
 import {
     addTask,
