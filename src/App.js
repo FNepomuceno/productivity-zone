@@ -3,7 +3,7 @@ import React from 'react';
 import Header from './Header.js';
 import ContentContainer from './ContentContainer.js';
 import TabSelector from './TabSelector.js';
-import TasksApp from './TasksApp.js';
+import TasksApp from './apps/TasksApp.js';
 
 import {
     addUser,

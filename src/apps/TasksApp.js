@@ -1,15 +1,16 @@
 import React from 'react';
 
-import Modal from './Modal.js';
-import TaskItem from './TaskItem.js';
-import CreateForm from './form/CreateForm.js';
-import EditForm from './form/EditForm.js';
+import Modal from '../Modal.js';
+import CreateForm from '../form/CreateForm.js';
+import EditForm from '../form/EditForm.js';
 
 import {
     addTask,
     getTasks,
     updateTask,
-} from './database.js';
+} from '../database.js';
+
+import TaskItem from './TaskItem.js';
 
 class TasksApp extends React.Component {
     constructor(props) {
