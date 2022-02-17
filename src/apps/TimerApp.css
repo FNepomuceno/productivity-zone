@@ -1,0 +1,7 @@
+.TimerApp {
+    text-align: center;
+}
+
+.TimerApp > h1 {
+    font-size: 5em;
+}

@@ -3,7 +3,9 @@ import React from 'react';
 import Header from './Header.js';
 import ContentContainer from './ContentContainer.js';
 import TabSelector from './TabSelector.js';
+
 import TasksApp from './apps/TasksApp.js';
+import TimerApp from './apps/TimerApp.js';
 
 import {
     addUser,
@@ -124,7 +126,7 @@ class App extends React.Component {
         let types = ['Tasks', 'Timer'];
         let typeMap = {
             'Tasks': <TasksApp db={this.state.db} user={this.state.user} />,
-            'Timer': <p>Timer App coming soon!</p>,
+            'Timer': <TimerApp />,
         };
 
         let content = typeMap[this.state.tab] || <p>Choose an app above</p>;
