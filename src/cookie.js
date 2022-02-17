@@ -1,5 +1,4 @@
-// TODO: remember to change from testing duration to default of 10 minutes
-const SESSION_TIME = 30; // 0.5 minutes
+const SESSION_TIME = 10 * 60;
 
 function addSeconds(date, numSeconds) {
     return new Date(date.getTime() + (numSeconds * 1000));
@@ -10,19 +9,22 @@ function sessionTimeString(sessDuration) {
     return addSeconds(new Date(), sessDuration).toUTCString();
 }
 
-function setUser(username, sessDuration) {
+function setUser(username, expires) {
     let contents = {
         username: username,
-        expires: sessionTimeString(sessDuration),
+        expires: expires,
         path: '/',
     };
 
     createCookie(contents);
 }
 
-function addUser(username) {
+function addUser(user) {
+    const username = user?.name;
+    const expires = user?.exp?.toUTCString() || sessionTimeString();
+
     if (username) {
-        setUser(username);
+        setUser(username, expires);
     }
 }
 

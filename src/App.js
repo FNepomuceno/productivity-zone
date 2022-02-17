@@ -96,7 +96,7 @@ class App extends React.Component {
         this.setState({
             user,
         }, () => {
-            addUser(user.name);
+            addUser(user);
         });
     }
 
