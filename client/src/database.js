@@ -46,6 +46,11 @@ function addTask(db, dueDate, textDesc, user) {
 }
 
 function getTasks(db, user, handleTasks, onlyUnfinished) {
+    if (!db) {
+        console.error("No database!");
+        return [];
+    }
+
     const userName = (!!user)? user.name: GUEST_NAME;
     const transaction = db.transaction("TaskList", "readonly");
     const store = transaction.objectStore("TaskList");
@@ -72,6 +77,11 @@ function getTasks(db, user, handleTasks, onlyUnfinished) {
 }
 
 function clearGuestTasks(db) {
+    if (!db) {
+        console.error("No database!");
+        return [];
+    }
+
     const transaction = db.transaction("TaskList", "readwrite");
     const store = transaction.objectStore("TaskList");
 

@@ -82,12 +82,30 @@ class App extends React.Component {
     }
 
     handleLoginClick(response) {
-        // TODO: authenticate with backend
-        console.log(response);
+        let b64url = response.credential.split('.')[1];
+        let b64 = b64url.replace(/-/g, '').replace(/_/g, '/');
+        let tText = decodeURIComponent(escape(window.atob(b64)));
+        let token = JSON.parse(tText);
+        let user = {
+            name: token.name,
+            g_id: token.sub,
+            login: new Date(token.iat * 1000),
+            exp: new Date(token.exp * 1000),
+        }
+
+        this.setState({
+            user,
+        }, () => {
+            addUser(user.name);
+        });
     }
 
     handleLogoutClick() {
-        // TODO: logout from backend
+        this.setState({
+            user: null,
+        }, () => {
+            removeUser();
+        });
     }
 
     makeTabUpdater(newValue) {
