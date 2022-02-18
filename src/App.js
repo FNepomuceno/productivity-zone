@@ -126,10 +126,12 @@ class App extends React.Component {
         let types = ['Tasks', 'Timer'];
         let typeMap = {
             'Tasks': <TasksApp db={this.state.db} user={this.state.user} />,
-            'Timer': <TimerApp />,
         };
 
-        let content = typeMap[this.state.tab] || <p>Choose an app above</p>;
+        let content = typeMap[this.state.tab];
+        if (!content && this.state.tab !== 'Timer') {
+            content = <p>Choose an app above</p>;
+        }
 
         return (
             <div className="app-container">
@@ -142,6 +144,7 @@ class App extends React.Component {
                     <TabSelector switchTab={this.makeTabUpdater}
                         type={this.state.tab} types={types} />
                     {content}
+                    <TimerApp visible={this.state.tab === 'Timer'} />
                 </ContentContainer>
                 <div className="footer">
                     Made by me

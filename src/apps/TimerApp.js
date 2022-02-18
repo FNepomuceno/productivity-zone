@@ -110,7 +110,7 @@ class TimerApp extends React.Component {
         const mins = toDoubleDigits(Math.floor(this.state.timeRemaining / 60));
         const secs = toDoubleDigits(this.state.timeRemaining % 60);
 
-        return (
+        return !this.props.visible? null: (
             <div className='TimerApp'>
                 <h1>{`${mins}:${secs}`}</h1>
                 <h2>{this.state.flavorText}</h2>
