@@ -1,6 +1,9 @@
 import React from 'react';
 
 import Header from './Header.js';
+import TitleDisplay from './TitleDisplay.js';
+import ProfileInfo from './ProfileInfo.js';
+
 import ContentContainer from './ContentContainer.js';
 import TabSelector from './TabSelector.js';
 
@@ -135,11 +138,14 @@ class App extends React.Component {
 
         return (
             <div className="app-container">
-                <Header
-                    user={this.state.user}
-                    login={this.handleLoginClick}
-                    logout={this.handleLogoutClick}
-                />
+                <Header>
+                    <TitleDisplay />
+                    <ProfileInfo
+                        user={this.state.user}
+                        login={this.handleLoginClick}
+                        logout={this.handleLogoutClick}
+                    />
+                </Header>
                 <ContentContainer>
                     <TabSelector switchTab={this.makeTabUpdater}
                         type={this.state.tab} types={types} />

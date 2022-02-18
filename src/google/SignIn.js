@@ -13,8 +13,6 @@ class SignIn extends React.Component {
 
         this.state = {
             status: 'Starting',
-            error: undefined,
-            result: undefined,
         };
     }
 
@@ -24,22 +22,18 @@ class SignIn extends React.Component {
         });
     }
 
-    componentDidUpdate() {
-        if (this.state.status === 'Loaded') {
-            this.initializeRender(this.state.result);
-        }
-    }
-
     loadScript() {
         this.script.then((e) => {
             this.setState({
-                'status': 'Loaded',
-                'result': e,
+                status: 'Loaded',
+            }, () => {
+                this.initializeRender(e);
             });
         }).catch((e) => {
             this.setState({
-                'status': 'Error',
-                'error': e,
+                status: 'Error',
+            }, () => {
+                console.error(e);
             });
         });
     }

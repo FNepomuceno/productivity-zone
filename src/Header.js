@@ -1,17 +1,9 @@
-import TitleDisplay from './TitleDisplay.js';
-import ProfileInfo from './ProfileInfo.js';
-
 import './Header.css';
 
 function Header(props) {
     return (
         <div className="header">
-            <TitleDisplay />
-            <ProfileInfo
-                user={props.user}
-                login={props.login}
-                logout={props.logout}
-            />
+            {props.children}
         </div>
     );
 }
