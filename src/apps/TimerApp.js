@@ -26,8 +26,8 @@ class TimerApp extends React.Component {
     startTimer() {
         this.setState({
             timer: window.setTimeout(() => {
-                this.tick();
-                this.startTimer();
+                const shouldTick = this.tick();
+                if (shouldTick) { this.startTimer() }
             }, 1000),
         });
     }
@@ -45,17 +45,55 @@ class TimerApp extends React.Component {
         if (this.state.state === 'focus') {
             this.setState({
                 state: 'focus pause',
-            }, () => this.stopTimer());
+            }, this.stopTimer);
         } else if (this.state.state === 'focus pause') {
             this.setState({
                 state: 'focus',
-            }, () => this.startTimer());
+            }, this.startTimer);
+        } if (this.state.state === 'break') {
+            this.setState({
+                state: 'break pause',
+            }, this.stopTimer);
+        } else if (this.state.state === 'break pause') {
+            this.setState({
+                state: 'break',
+            }, this.startTimer);
         }
     }
 
     tick() {
-        // TODO: update time remaining
-        console.log('tick');
+        if (this.state.timeRemaining > 1) {
+            this.setState({
+                timeRemaining: this.state.timeRemaining - 1,
+            });
+            return true;
+        } else {
+            if (this.state.state === 'break') {
+                this.setState({
+                    state: 'focus pause',
+                    timeRemaining: FOCUS_DURATION * 60,
+                    flavorText: 'Time to focus!',
+                });
+            } else if (this.state.state === 'focus') {
+                const tomatoCount = this.state.tomatoCount + 1;
+                if (tomatoCount % 4 === 0) {
+                    this.setState({
+                        state: 'break pause',
+                        tomatoCount,
+                        timeRemaining: LARGE_BREAK_DURATION * 60,
+                        flavorText: 'Large break! You earned it!',
+                    });
+                } else {
+                    this.setState({
+                        state: 'break pause',
+                        tomatoCount,
+                        timeRemaining: SMALL_BREAK_DURATION * 60,
+                        flavorText: 'Small break!',
+                    });
+                }
+            }
+            return false;
+        }
     }
 
     componentWillUnmount() {
@@ -69,14 +107,27 @@ class TimerApp extends React.Component {
             timerToggle = <button onClick={this.toggleTimer}>STOP</button>;
         }
 
-        // TODO: update display to match time remaining
+        const mins = toDoubleDigits(Math.floor(this.state.timeRemaining / 60));
+        const secs = toDoubleDigits(this.state.timeRemaining % 60);
+
         return (
             <div className='TimerApp'>
-                <h1>00:00</h1>
+                <h1>{`${mins}:${secs}`}</h1>
+                <h2>{this.state.flavorText}</h2>
+                <p>Tomato count: {this.state.tomatoCount}</p>
                 { timerToggle }
             </div>
         );
     }
+}
+
+// --- Functions ---
+function toDoubleDigits(n) {
+    const twoPlusDigits = (n).toLocaleString('en-US',
+        { minimumIntegerDigits: 2, useGrouping: false });
+    const result = twoPlusDigits.slice(-2);
+
+    return result;
 }
 
 export default TimerApp;
