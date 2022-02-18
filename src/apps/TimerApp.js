@@ -103,16 +103,20 @@ class TimerApp extends React.Component {
     render() {
         let timerToggle = <button onClick={this.toggleTimer}>START</button>;
 
-        if (this.state.state === 'focus' || this.state.state === 'break') {
-            timerToggle = <button onClick={this.toggleTimer}>STOP</button>;
-        }
-
         const mins = toDoubleDigits(Math.floor(this.state.timeRemaining / 60));
         const secs = toDoubleDigits(this.state.timeRemaining % 60);
+        const timeString = `${mins}:${secs}`;
+
+        if (this.state.state === 'focus' || this.state.state === 'break') {
+            timerToggle = <button onClick={this.toggleTimer}>STOP</button>;
+            document.title = `${timeString} - Productivity Zone`;
+        } else {
+            document.title = 'Productivity Zone';
+        }
 
         return !this.props.visible? null: (
             <div className='TimerApp'>
-                <h1>{`${mins}:${secs}`}</h1>
+                <h1>{timeString}</h1>
                 <h2>{this.state.flavorText}</h2>
                 <p>Tomato count: {this.state.tomatoCount}</p>
                 { timerToggle }
